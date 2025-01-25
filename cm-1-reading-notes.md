@@ -9,9 +9,9 @@ then I think it might make more sense for me to note it at that location in the
 respective .ipynb file itself, so that I don't have to dig for such notes in the
 future if I'm rereading the book itself instead of my notes.
 
-## 01-g-h-filter
+# 01-g-h-filter
 
-### Terms:
+## Terms:
 
 - **residual**: measurement minus prediction
 - **state _estimate_**: the "**state**" itself is the true system configuration, but 
@@ -33,7 +33,7 @@ For a **g-h filter**, we have:
 - **h**: the scaling used for _change in measurement over time_
   - Likewise, a higher "h" means we update faster based on measurements.
 
-### Key Points
+## Key Points:
 
 There are a bunch of different filters that can be classified as g-h filters, 
 including Kalman filters.
@@ -52,7 +52,7 @@ a variance which somewhat shows the valid range of values the state can take.
 But anyway, I'm probably overthinking this for now. It's definitely a good thing
 to keep an open mind about and to not hastily throw away data.
 
-### Elaborations:
+## Elaborations:
 
 $$
 \begin{align*}
@@ -61,3 +61,39 @@ $$
     &= \dot{x}_k + h\frac{z - (\text{latest prediction})}{dt}
 \end{align*}
 $$
+
+
+# 02-Discrete-Bayes
+
+## Terms:
+
+- **prior**: the probability before incorporating measurement or other info.
+- **belief**: a measure of the strength of our knowledge about something.
+- **multimodal**: where the probability distribution or pdf has multiple
+  "modes", i.e. maximums i.e. peaks.
+- **likelihood**: a function from a model parameter to the probability of, given
+  said model, seeing the data we saw. If our model parameter is named $\theta$,
+  it is a function $L: \theta \to [0,1]$. The function notation may be either
+  $L_x(\theta)$ or $L(\theta|x)$, where $x$ is the observed data.
+    - For discrete probabilities, the function is $\theta \to P_\theta(X = x)$
+      for data $x$ with "parameter" $\theta$. Alternatively, in contexts such as
+      this chapter, it can be thought of as $P(X = x | \theta)$ (more elaboration below.)
+    - For continuous probabilities, the function is $\theta->f(x|\theta)$ for
+      probability density function $f$.
+    - In both cases, it's analogous to finding $P(A|B)$ across all $B$, meaning 
+      the likelihoods may not sum/integrate up to 1 in the same way that 
+      $P(A|B)$ would across all possible A values.
+    - Above, it would be more "common" to use `\pazocal{L}` in place of $L$, but
+      I used $L$ because it seems that certain markdown renderers don't support
+      `\pazocal` (e.g., VS Code's) and to make the markdown source more readable.
+
+Frequentist vs. Bayesian statistics:
+
+- **frequentist statistics**: based on frequency with which events occur.
+- **bayesian statistics**: takes past information into account.
+
+## Key Points:
+
+**Bayesian filters** are a family of filters that Kalman Filters belong to.
+
+
