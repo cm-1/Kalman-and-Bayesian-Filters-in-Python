@@ -279,3 +279,41 @@ P(S3m|S0i,M1,M2) = \sum_{k=1} P(S3m|S2k,M2,M1,S0i)P(S2k,M2,M1,S0i)/P(M2,M1,S0i)
                  = \sum_{k=1} P(S3m|S2k,(M2,M1,S0i))P(S2k|S0i,M1,M2)
 ...
 ```
+
+# 03-Gaussians
+## Terms:
+
+A **Gaussian function** is a non-normalized Gaussian, while a **Gaussian distribution** is a normalized one.
+
+Terms for shapes of probability distributions:
+
+- **skew**: how asymmetrical a probability distribution is about the mean.
+- **kurtosis**: how much of a distribution is concentrated in the tails vs. centre.
+  - A normal distribution has an _"excess kurtosis"_ of 0, a uniform has negative excess kurtosis, and a Laplace distribution (whose tails "degrade" slower than a Gaussian) has positive excess kurtosis.
+    - The above examples come from [Wikipedia's page for "kurtosis"](https://en.wikipedia.org/wiki/Kurtosis).
+## Key Points:
+
+The squaring in the calculation of variance rather than taking, e.g., absolute value, or 4th power, etc. was apparently something that Gauss, the technique's inventor, recognized was somewhat arbitrary.
+
+Probability density represents _relative_ probabilities (e.g., relative amount of cars going a certain speed).
+
+One can compare probability density to physical density, e.g., of a rock or sponge.
+A sponge is a good example because density clearly varies across the sponge,
+The mass of a region of a sponge is going to be the triple-integration of the density over said 3D region. 
+
+You can also sort of use this as a physical analogy for how, just like how an infinitesimal point of a 3D object has no mass, the probability value for points in continuous distributions is zero...
+I do not personally, at least right now, find this analogy better (or worse) than others I've heard for explaining why each point has zero probability,
+but it's a new one, so I'm noting it in case it helps me or someone else in the future.
+
+The sum $X + Y$ of two Gaussian **Random Variables** $X$ and $Y$ is also a Gaussian **Random Variable**. 
+The product of two Gaussian **Distributions** is a Gaussian **Function**.
+
+For a proof that $X+Y$ is also Gaussian, one can use a convolution of their probability distributions. This makes sense, because, for example, in the discrete case, what is P(X+Y) = 0?
+It is P(X=0,Y=0) + P(X=1,Y=-1) + P(X=2,Y=-2) + ...
+
+
+Motivation for using Gaussians: we can describe a whole, continuous distribution with just two numbers, and likewise, every sum/product with two numbers.
+
+Limitation: if your noise is not a zero-mean Gaussian, then the Kalman filter will perform suboptimally.
+
+
