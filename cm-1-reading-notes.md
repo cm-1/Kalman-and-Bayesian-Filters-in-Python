@@ -291,6 +291,19 @@ Terms for shapes of probability distributions:
 - **kurtosis**: how much of a distribution is concentrated in the tails vs. centre.
   - A normal distribution has an _"excess kurtosis"_ of 0, a uniform has negative excess kurtosis, and a Laplace distribution (whose tails "degrade" slower than a Gaussian) has positive excess kurtosis.
     - The above examples come from [Wikipedia's page for "kurtosis"](https://en.wikipedia.org/wiki/Kurtosis).
+
+Bayes' Theorem terms:
+$$P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)};\ \  \text{posterior} = \frac{\text{likelihood $\times$ prior}}{P(\text{evidence})}$$
+
+I.e.:
+
+- $B$ is the **evidence**
+- $P(A)$ is the **prior**
+- $P(B \mid A)$ is the **likelihood**
+- $P(A \mid B)$ is the **posterior**
+
+(Alternatively, we may have $p(...)$ instead of $P(...)$, to denote a **probability distribution**)
+
 ## Key Points:
 
 The squaring in the calculation of variance rather than taking, e.g., absolute value, or 4th power, etc. was apparently something that Gauss, the technique's inventor, recognized was somewhat arbitrary.
@@ -305,15 +318,81 @@ You can also sort of use this as a physical analogy for how, just like how an in
 I do not personally, at least right now, find this analogy better (or worse) than others I've heard for explaining why each point has zero probability,
 but it's a new one, so I'm noting it in case it helps me or someone else in the future.
 
+### Gaussians
+
+Motivation for using Gaussians: we can describe a whole, continuous distribution with just two numbers, and likewise, every sum/product with two numbers.
+
+Limitation: if your noise is not a zero-mean Gaussian, then the Kalman filter will perform suboptimally.
+
+There are also many distributions that are "Gaussian" but not perfectly modeled
+by them. E.g., heights are often modeled with Guassians even though said
+Gaussians will assign negative heights nonzero probabilities.
+This is also important to consider when we use the **central limit theorem**
+to discuss the sample means of distributions in general.
+
+If we were to try to naively represent such quantities with a Gaussian by simply
+"cutting off" the tails at the necessary points, the integral of said
+distribution would no longer sum to 1.
+
+One distribution the book looks at besides just the Gaussian is the
+Student's $t$-distribution. When sampling values from such a
+distribution, it is common to see outliers that are "far more" than 3 standard
+deviations from the mean, unlike with Gaussians.
+
+### Summing and Multiplying Gaussians
+
 The sum $X + Y$ of two Gaussian **Random Variables** $X$ and $Y$ is also a Gaussian **Random Variable**. 
 The product of two Gaussian **Distributions** is a Gaussian **Function**.
 
 For a proof that $X+Y$ is also Gaussian, one can use a convolution of their probability distributions. This makes sense, because, for example, in the discrete case, what is P(X+Y) = 0?
 It is P(X=0,Y=0) + P(X=1,Y=-1) + P(X=2,Y=-2) + ...
 
+The mean and variance of the **sum** of two Gaussians is:
+$$\begin{gathered}
+\mu = \mu_1 + \mu_2 \\
+\sigma^2 = \sigma_1^2 + \sigma_2^2
+\end{gathered}$$
 
-Motivation for using Gaussians: we can describe a whole, continuous distribution with just two numbers, and likewise, every sum/product with two numbers.
+The mean and variance of the **product** of two Gaussians is:
+$$\begin{gathered}
+\mu =\frac{\mu_1\sigma_2^2 + \mu_2\sigma_1^2}{\sigma_1^2 + \sigma_2^2}\\
+\sigma^2 =\frac{\sigma_1^2 \sigma_2^2}{\sigma_1^2 + \sigma_2^2} 
+\end{gathered}$$
 
-Limitation: if your noise is not a zero-mean Gaussian, then the Kalman filter will perform suboptimally.
+
+### Total Probability Theorem
+Discrete case:
+
+$$P(A) = \sum_n P(A \cap B_n) = \sum_n P(A \mid B_n) P(B_n)$$
+
+Continuous case:
+
+$$P(A) = \int P(A \mid X=x)f_X (x) \mathrm{d} x$$
+
+This is the reason for the convolution in the Discrete Bayes calculations.
+
+### Bayes' Theorem
 
 
+$$P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B \mid A)\, P(A)}{P(B)}$$
+
+Also holds for *distributions* (which we denote with $p(...)$ instead of $P(...)$).
+
+Labbe says that the following integral form is often used:
+
+$$p(A \mid B) = \frac{p(B \mid A)\, p(A)}{\int p(B \mid A_j) p(A_j) \,\, \mathrm{d}A_j}$$
+
+While the denominator is often impossible to integrate analytically, sometimes
+one can just normalize the posterior distribution instead. 
+
+The benefit of Bayes' theorem is that, ordinarily, the direct calculation of
+$p(x_i \mid Z)$ for state $x_i$ and measurement $Z$ is very hard, but
+calculating $p(Z \mid x_i)$ is often straightforward. 
+
+### Misc.
+
+The author notes that he attended a NASA presentation where they said that
+although the theory describing a system said they should use 3 standard
+deviations to distinguish noise from valid measurements, for good results they
+had to actually use 5-6 standard deviations instead, which they determined via
+experiments.
