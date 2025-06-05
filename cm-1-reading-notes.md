@@ -136,6 +136,10 @@ have a new _posterior_ after each "Update"/"Measure" stage.
 We use **likelihood** of measurement-given-model to update our **belief**.
 We also use our process model to update our **belief**.
 
+This example uses histograms because it is modelling a discrete scenario. But
+the cost of computation increases substantially the "resolution" of the problem
+is (e.g., the number of doors or wall segments).
+
 ## Elaborations:
 
 Below, I use `!` for "NOT" (i.e., negation) and `^` or `,` for "AND".
@@ -396,3 +400,26 @@ although the theory describing a system said they should use 3 standard
 deviations to distinguish noise from valid measurements, for good results they
 had to actually use 5-6 standard deviations instead, which they determined via
 experiments.
+
+
+# 04-One-Dimensional-Kalman-Filters
+## Terms:
+
+The book uses the following symbols for various terms defined previously:
+
+|                        |                                                    |
+| ---                    | ---                                                |
+| $\bar{\mathbf{x}}$     | **prior**                                          |
+| $\mathcal{L}$          | **likelihood** (of a measurement, given the prior) |
+| $f_\mathbf{x}(\ldots)$ | **process model**                                  |
+| $\ast$                 | **convolution** operator                           |
+
+
+
+## Key Points:
+
+We could use higher-resolution histograms to model problems like this one, but
+that greatly increases memory and computation costs. Gaussians each only require
+two parameters (mean and variance) and adding or multiplying Gaussians together
+to update them involves very little computation, as mentioned in the previous
+section.
